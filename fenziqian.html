@@ -91,6 +91,9 @@
         <div class="active1 result" id=result></div>
 
         <div class="form-group row">
+            <!--<div class=col>-->
+                <!--<button class="btn btn-block" data-i18n=contract/call_test disabled id=call_test></button>-->
+            <!--</div>-->
             <div class=col>
                 <button class="btn btn-block" data-i18n=contract/call_submit disabled id=call></button>
             </div>
@@ -313,7 +316,8 @@
         selectWalletFile: [".select-wallet-file", onUnlockFile]
     });
 
-    $("#call").on("click", onClickCall);
+    $("#call").on("click", onClickCall);//submit写数据时调用
+    $("#call_test").on("click", onClickCallTest);//callTest获取数据调用
 
     /**
      * unlock执行的方法
@@ -351,6 +355,7 @@
                 })
                 .then(function (resp) {
                     //submit 要处理
+//                    $("#call_test").attr("disabled", false);
                     $("#call").attr("disabled", false);
 //                        $("#call_result").text("");
 //                        $(".next").removeClass("active1");
@@ -388,12 +393,49 @@
     }
 
     /**
+     * callTest调用
+     */
+    function onClickCallTest() {
+        validateTab3() && innerCall(function (params) {
+            neb.api
+                    .call({
+                        from: params.from,
+                        to: params.to,
+                        value: params.value,
+                        nonce: params.nonce,
+                        gasPrice: params.gasPrice,
+                        gasLimit: params.gasLimit,
+                        contract: params.contract
+                    })
+                    .then(function (resp) {
+                        $("#call_test_result").text(JSON.stringify(resp));
+
+                        if (resp.execute_err && resp.execute_err !== "") {
+                            $("#call").attr("disabled", true);
+                            $("#call_result").text("");
+                            $(".next").removeClass("active1");
+                        } else {
+                            $("#call").attr("disabled", false);
+                            $("#call_result").text("");
+                            $(".next").removeClass("active1");
+                        }
+                    })
+                    .catch(function (err) {
+                        $("#call_test_result").text(JSON.stringify(err));
+                        $("#call").attr("disabled", true);
+                        $("#call_result").text("");
+                        $(".next").removeClass("active1");
+                    });
+        });
+    }
+
+    /**
      * 提交
      */
     function onClickCall() {
         $(".modal.loading").modal("show");
 
-        innerCall(function (params) {
+        innerCallSubmit(function (params) {
             var gTx = new nebulas.Transaction(parseInt(localSave.getItem("chainId")),
                 globalParams.account,
                 params.to, params.value, params.nonce, params.gasPrice, params.gasLimit, params.contract);
@@ -495,7 +537,102 @@
         // you can get different result by hit 'test' multiple times
         neb.api.getAccountState(params.from).then(function (resp) {
             var balance = nebulas.Unit.fromBasic(resp.balance, "nas"),
-                $tab = $(".show.tab");
+                    $tab = $(".show.tab");
+
+            params.nonce = parseInt(resp.nonce) + 1;
+
+            $("#run_balance").val(balance + " NAS");
+
+            callback(params);
+        }).catch(function (err) {
+            // console.log("prepare nonce error: " + err);
+            bootbox.dialog({
+                backdrop: true,
+                onEscape: true,
+                message: i18n.apiErrorToText(err.message),
+                size: "large",
+                title: "Error"
+            });
+        });
+    }
+
+    function innerCallSubmit(callback) {
+        let params = {};
+
+        if (!globalParams.account) {
+            // TODO 提示钱包信息不正确
+            return;
+        }
+        params.from = globalParams.account.getAddressString();
+
+        // prepare to
+        let toAddr = $("#run_to_addr").val().trim();
+        if (!Account.isValidAddress(toAddr)) {
+            $("#run_to_addr").addClass("err");
+            setTimeout(function () {
+                $("#run_to_addr").removeClass("err");
+            }, 5000);
+            return;
+        }
+        params.to = toAddr;
+
+        // prepare gasLimit
+        let gasLimit = Utils.toBigNumber(0);
+        try {
+            gasLimit = Utils.toBigNumber($("#run_gas_limit").val());
+        } catch (err) {
+            console.log(err);
+        }
+        if (gasLimit.cmp(Utils.toBigNumber(0)) <= 0) {
+            $("#run_gas_limit").addClass("err");
+            setTimeout(function () {
+                $("#run_gas_limit").removeClass("err");
+            }, 5000);
+            return;
+        }
+        params.gasLimit = gasLimit.toNumber();
+
+        // prepare gasPrice
+        let gasPrice = Utils.toBigNumber(0);
+        try {
+            gasPrice = Utils.toBigNumber($("#run_gas_price").val());
+        } catch (err) {
+            console.log(err);
+        }
+        if (gasPrice.cmp(Utils.toBigNumber(0)) <= 0) {
+            $("#run_gas_price").addClass("err");
+            setTimeout(function () {
+                $("#run_gas_price").removeClass("err");
+            }, 5000);
+            return;
+        }
+        params.gasPrice = gasPrice.toNumber();
+
+        // prepare value
+        let value = Utils.toBigNumber(0);
+        try {
+            value = nebulas.Unit.toBasic(Utils.toBigNumber($("#run_value").val()), "nas");
+        } catch (err) {
+            console.log(err);
+        }
+        if (value.cmp(Utils.toBigNumber(0)) < 0) {
+            // TODO 添加提示value输入不对
+            console.log("invalid value");
+            return;
+        }
+        params.value = value;
+
+        // prepare contract
+        params.contract = {
+            "function": 'set',
+            "args": '["aaa","dddou"]'//取方法参数
+        };
+        // prepare nonce
+        // needs refresh data on every 'test' and 'commit' call, because data update may slow,
+        // you can get different result by hit 'test' multiple times
+        neb.api.getAccountState(params.from).then(function (resp) {
+            var balance = nebulas.Unit.fromBasic(resp.balance, "nas"),
+                    $tab = $(".show.tab");
 
             params.nonce = parseInt(resp.nonce) + 1;
 

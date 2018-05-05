@@ -110,11 +110,11 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modal-container-565270" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade jizhang" id="modal-container-565270" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">
+                    <h5 class="modal-title" id="myModalLabhhnel">
                         记帐
                     </h5>
                     <button type="button" class="close" data-dismiss="modal">
@@ -241,6 +241,14 @@
 <script src=lib/codemirror/codemirror.js></script>
 <script src=lib/codemirror/javascript.js></script>
 <script>
+    var FzInfo = function(text) {
+        this.name = "";
+        this.money = "";
+        this.cause = "";
+        this.date = "";
+        this.mark = "";
+        this.type = "";
+    };
     $(".start").click(function () {
         alert("xxhong")
     })
@@ -272,10 +280,18 @@
         var udate = $('#u_date').val();
         var umark = $('#u_mark').val();
         var utype = $("input[name='optionsRadios']:checked").val();
-        console.log("uname："+uname+ " umoney:"+umoney+" ucause:"+ucause+" udate:"+udate+" umark:"+umark+" utype:"+utype)
-        $(".modal").modal("hide");//关闭模态框
+        var fzq = new FzInfo();
+        fzq.name = uname;
+        fzq.money = umoney;
+        fzq.cause = ucause;
+        fzq.date= udate;
+        fzq.mark = umark;
+        fzq.type=utype;
+        var json  = JSON.stringify(fzq);
+        console.log("json="+json)
+        $(".jizhang").modal("hide");//关闭模态框
     });
-    $('.modal').click(function(){//设置事件
+    $('.dropdown-item').click(function(){//设置事件
         $('#u_cause').val($(this).text());
     })
     var nebulas = require("nebulas"),
@@ -290,7 +306,7 @@
     neb.setRequest(new nebulas.HttpRequest(localSave.getItem("apiPrefix") || "https://testnet.nebulas.io/"));
     uiBlock.insert({
         footer: ".footer",
-        header: ".header",
+        header: ".header"   ,
         iconAddress: ".icon-address",//来自地址、目的地址
         logoMain: ".logo-main",
         numberComma: ".number-comma",

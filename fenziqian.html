@@ -50,7 +50,52 @@
             <button class="btn btn-primary btn-lg start" role="button">开始使用</button>
         </p>
     </div>
+    <div class="deploy_contract tab" id=tab3>
+        <div class=select-wallet-file></div>
 
+        <div class="form-group row">
+            <div class=col>
+                <label data-i18n=send-nas/from-address></label>
+                <div class=icon-address data-id=run_from_addr data-disabled></div>
+            </div>
+            <div class=col>
+                <label data-i18n=send-nas/to-address></label>
+                <div class=icon-address data-id=run_to_addr></div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class=col>
+                <label data-i18n=send-nas/balance></label>
+                <input class=form-control disabled id=run_balance>
+            </div>
+            <div class=col>
+                <label data-i18n=send-nas/amount></label>
+                <input class=form-control id=run_value value=0 data-validate-order-matters="required number">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class=col>
+                <label data-i18n=gas-limit></label>
+                <input class=form-control type=text id=run_gas_limit value=200000>
+            </div>
+            <div class=col>
+                <label data-i18n=gas-price></label>
+                <i>( 1 NAS = 1EWei = 10
+                    <sup>18</sup> Wei )</i>
+                <input class=form-control type=text id=run_gas_price>
+            </div>
+        </div>
+
+        <div class="active1 result" id=result></div>
+
+        <div class="form-group row">
+            <div class=col>
+                <button class="btn btn-block" data-i18n=contract/call_submit disabled id=call></button>
+            </div>
+        </div>
+    </div>
     <a id="modal-565270" href="#modal-container-565270" role="button" class="btn" data-toggle="modal">记账</a>
     <div class="card">
         <div class="card-header">
@@ -160,7 +205,18 @@
     <!--<div class="container select-wallet-file"></div>-->
 
 </div>
-
+<div class="fade loading modal" data-backdrop=static>
+    <div class=modal-dialog>
+        <div class=modal-content>
+            <div class=modal-body>
+                <div class=progress>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role=progressbar
+                         style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--<script src="./js/jquery-3.3.1.min.js"></script>-->
 <!--<script src="./js/bootstrap.min.js"></script>-->
@@ -189,40 +245,258 @@
         alert("xxhong")
     })
     $('#save_u').click(function () {
-       var uname = $('#u_name').val();
-       var umoney = $('#u_money').val();
-       if(!uname){
-           bootbox.dialog({
-               backdrop: true,
-               onEscape: true,
-               message: localSave.getItem("lang") == "en" ? e : "姓名不能为空",
-               size: "large",
-               title: "提示"
-           });
-           return
-       }
-       if(!umoney){
-           bootbox.dialog({
-               backdrop: true,
-               onEscape: true,
-               message: localSave.getItem("lang") == "en" ? e : "金额不能为空",
-               size: "large",
-               title: "提示"
-           });
-           return;
-       }
+        var uname = $('#u_name').val();
+        var umoney = $('#u_money').val();
+        if(!uname){
+            bootbox.dialog({
+                backdrop: true,
+                onEscape: true,
+                message: localSave.getItem("lang") == "en" ? e : "姓名不能为空",
+                size: "large",
+                title: "提示"
+            });
+            return
+        }
+        if(!umoney){
+            bootbox.dialog({
+                backdrop: true,
+                onEscape: true,
+                message: localSave.getItem("lang") == "en" ? e : "金额不能为空",
+                size: "large",
+                title: "提示"
+            });
+            return;
+        }
 
-       var ucause = $('#u_cause').val();
-       var udate = $('#u_date').val();
-       var umark = $('#u_mark').val();
-       var utype = $("input[name='optionsRadios']:checked").val();
-       console.log("uname："+uname+ " umoney:"+umoney+" ucause:"+ucause+" udate:"+udate+" umark:"+umark+" utype:"+utype)
+        var ucause = $('#u_cause').val();
+        var udate = $('#u_date').val();
+        var umark = $('#u_mark').val();
+        var utype = $("input[name='optionsRadios']:checked").val();
+        console.log("uname："+uname+ " umoney:"+umoney+" ucause:"+ucause+" udate:"+udate+" umark:"+umark+" utype:"+utype)
         $(".modal").modal("hide");//关闭模态框
     });
     $('.modal').click(function(){//设置事件
         $('#u_cause').val($(this).text());
     })
+    var nebulas = require("nebulas"),
+        Account = nebulas.Account,
+        Utils = nebulas.Utils,
+        neb = new nebulas.Neb(),
+        globalParams = {
+            account: null
+        },
+        validateTab3 = uiBlock.validate("#tab3");
 
+    neb.setRequest(new nebulas.HttpRequest(localSave.getItem("apiPrefix") || "https://testnet.nebulas.io/"));
+    uiBlock.insert({
+        footer: ".footer",
+        header: ".header",
+        iconAddress: ".icon-address",//来自地址、目的地址
+        logoMain: ".logo-main",
+        numberComma: ".number-comma",
+        selectWalletFile: [".select-wallet-file", onUnlockFile]
+    });
+
+    $("#call").on("click", onClickCall);
+
+    /**
+     * unlock执行的方法
+     * @param swf
+     * @param fileJson
+     * @param account
+     * @param password
+     */
+    function onUnlockFile(swf, fileJson, account, password) {
+        var balance_nas, state,
+            fromAddr = account.getAddressString(),
+            $tab = $(swf).closest(".tab");
+
+        $(".modal.loading").modal("show");
+
+        $("#run_from_addr").val(fromAddr).trigger("input");
+//        if ($tab.prop("id") == "tab2") {
+//            $("#from_addr").val(fromAddr).trigger("input");
+//            $("#to_addr").val(account.getAddressString()).trigger("input");
+//        } else if ($tab.prop("id") == "tab3")
+//            $("#run_from_addr").val(fromAddr).trigger("input");
+
+        try {
+            account.fromKey(fileJson, password);
+            globalParams.account = account;
+            $("#unlock").hide();
+            $("#send").show();
+
+            neb.api.gasPrice()
+                .then(function (resp) {
+                    $("#gas_price").val(resp.gas_price);
+                    $("#run_gas_price").val(resp.gas_price);
+
+                    return neb.api.getAccountState(fromAddr);
+                })
+                .then(function (resp) {
+                    //submit 要处理
+                    $("#call").attr("disabled", false);
+//                        $("#call_result").text("");
+//                        $(".next").removeClass("active1");
+                    var balance = nebulas.Unit.fromBasic(resp.balance, "nas");
+
+                    $("#run_balance").val(balance + " NAS");
+
+                    $(".modal.loading").modal("hide");
+                })
+                .catch(function (e) {
+                    // this catches e thrown by nebulas.js!neb
+
+                    bootbox.dialog({
+                        backdrop: true,
+                        onEscape: true,
+                        message: i18n.apiErrorToText(e.message),
+                        size: "large",
+                        title: "Error"
+                    });
+
+                    $(".modal.loading").modal("hide");
+                });
+        } catch (e) {
+            // this catches e thrown by nebulas.js!account
+            bootbox.dialog({
+                backdrop: true,
+                onEscape: true,
+                message: localSave.getItem("lang") == "en" ? e : "keystore 文件错误, 或者密码错误",
+                size: "large",
+                title: "Error"
+            });
+
+            $(".modal.loading").modal("hide");
+        }
+    }
+
+    /**
+     * 提交
+     */
+    function onClickCall() {
+        $(".modal.loading").modal("show");
+
+        innerCall(function (params) {
+            var gTx = new nebulas.Transaction(parseInt(localSave.getItem("chainId")),
+                globalParams.account,
+                params.to, params.value, params.nonce, params.gasPrice, params.gasLimit, params.contract);
+
+            gTx.signTransaction();
+            neb.api
+                .sendRawTransaction(gTx.toProtoString())
+                .then(function (resp) {
+                    console.log(JSON.stringify(resp));
+                    $("#call_result").text(JSON.stringify(resp));
+                    $(".result").removeClass("active1");
+                    $(".next").removeClass("active1");
+                    $("#receipt_call").text(resp.txhash).prop("href", "check.html?" + resp.txhash);
+                    $(".modal.loading").modal("hide");
+                })
+                .catch(function (err) {
+                    $("#call_result").text(JSON.stringify(err));
+                    $(".result").removeClass("active1");
+                    $(".next").removeClass("active1");
+                    $(".modal.loading").modal("hide");
+                });
+        });
+    }
+
+    function innerCall(callback) {
+        let params = {};
+
+        if (!globalParams.account) {
+            // TODO 提示钱包信息不正确
+            return;
+        }
+        params.from = globalParams.account.getAddressString();
+
+        // prepare to
+        let toAddr = $("#run_to_addr").val().trim();
+        if (!Account.isValidAddress(toAddr)) {
+            $("#run_to_addr").addClass("err");
+            setTimeout(function () {
+                $("#run_to_addr").removeClass("err");
+            }, 5000);
+            return;
+        }
+        params.to = toAddr;
+
+        // prepare gasLimit
+        let gasLimit = Utils.toBigNumber(0);
+        try {
+            gasLimit = Utils.toBigNumber($("#run_gas_limit").val());
+        } catch (err) {
+            console.log(err);
+        }
+        if (gasLimit.cmp(Utils.toBigNumber(0)) <= 0) {
+            $("#run_gas_limit").addClass("err");
+            setTimeout(function () {
+                $("#run_gas_limit").removeClass("err");
+            }, 5000);
+            return;
+        }
+        params.gasLimit = gasLimit.toNumber();
+
+        // prepare gasPrice
+        let gasPrice = Utils.toBigNumber(0);
+        try {
+            gasPrice = Utils.toBigNumber($("#run_gas_price").val());
+        } catch (err) {
+            console.log(err);
+        }
+        if (gasPrice.cmp(Utils.toBigNumber(0)) <= 0) {
+            $("#run_gas_price").addClass("err");
+            setTimeout(function () {
+                $("#run_gas_price").removeClass("err");
+            }, 5000);
+            return;
+        }
+        params.gasPrice = gasPrice.toNumber();
+
+        // prepare value
+        let value = Utils.toBigNumber(0);
+        try {
+            value = nebulas.Unit.toBasic(Utils.toBigNumber($("#run_value").val()), "nas");
+        } catch (err) {
+            console.log(err);
+        }
+        if (value.cmp(Utils.toBigNumber(0)) < 0) {
+            // TODO 添加提示value输入不对
+            console.log("invalid value");
+            return;
+        }
+        params.value = value;
+
+        // prepare contract
+        params.contract = {
+            "function": 'get',
+//            "args": $("#call_args").val().trim()//取方法参数
+        };
+
+        // prepare nonce
+        // needs refresh data on every 'test' and 'commit' call, because data update may slow,
+        // you can get different result by hit 'test' multiple times
+        neb.api.getAccountState(params.from).then(function (resp) {
+            var balance = nebulas.Unit.fromBasic(resp.balance, "nas"),
+                $tab = $(".show.tab");
+
+            params.nonce = parseInt(resp.nonce) + 1;
+
+            $("#run_balance").val(balance + " NAS");
+
+            callback(params);
+        }).catch(function (err) {
+            // console.log("prepare nonce error: " + err);
+            bootbox.dialog({
+                backdrop: true,
+                onEscape: true,
+                message: i18n.apiErrorToText(err.message),
+                size: "large",
+                title: "Error"
+            });
+        });
+    }
 </script>
 </body>
 </html>

@@ -252,9 +252,9 @@
         this.mark = "";
         this.type = "";
     };
-    $(".start").click(function () {
-        alert("xxhong")
-    })
+    // var FzInfo={};
+    var fzq = new FzInfo();
+    $(".start").on("click", onClickCallTest);//callTest获取数据调用
     $('#save_u').click(function () {
         var uname = $('#u_name').val();
         var umoney = $('#u_money').val();
@@ -283,7 +283,7 @@
         var udate = $('#u_date').val();
         var umark = $('#u_mark').val();
         var utype = $("input[name='optionsRadios']:checked").val();
-        var fzq = new FzInfo();
+
         fzq.name = uname;
         fzq.money = umoney;
         fzq.cause = ucause;
@@ -623,9 +623,15 @@
         params.value = value;
 
         // prepare contract
+        var arr = [];
+
+        var fdata = fzq;
+
+        arr.push(fzq.name);
+        arr.push(fzq);
         params.contract = {
             "function": 'set',
-            "args": '["aaa","dddou"]'//取方法参数
+            "args": JSON.stringify(arr)//取方法参数
         };
         // prepare nonce
         // needs refresh data on every 'test' and 'commit' call, because data update may slow,

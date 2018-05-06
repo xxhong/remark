@@ -49,180 +49,211 @@
         <p id="bbb">说明:请使用帐号（钱包地址）登录查看记账</p>
         <p id="ccc">说明:请使用帐号（钱包地址）登录查看记账</p>
         <p>
-            <button class="btn btn-primary btn-lg start" role="button">开始使用</button>
+            <button class="btn btn-primary btn-lg" id="startBill">开始记账</button>
+            <button class="btn btn-primary btn-lg" id="checkRecord">查看记录</button>
+            <input type="hidden" id="requestFlag">
+            <input type="hidden" id="read_gas_price"><!--读取数据-->
+            <input type="hidden" id="read_run_balance"><!--读取数据-->
+            <input type="hidden" id="isUnlinkFlag" value=""><!--是否解锁 1:已经解锁-->
+            <input type="hidden" class=form-control id=get_data_list value=200000>
+            <!--<button class="btn btn-primary btn-lg start" role="button">开始使用</button>-->
         </p>
     </div>
-    <div class="deploy_contract tab" id=tab3>
-        <div class=select-wallet-file></div>
 
-        <div class="form-group row">
-            <div class=col>
-                <label data-i18n=send-nas/from-address></label>
-                <div class=icon-address data-id=run_from_addr data-disabled></div>
-            </div>
-            <div class=col>
-                <label data-i18n=send-nas/to-address></label>
-                <div class=icon-address data-id=run_to_addr></div>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class=col>
-                <label data-i18n=send-nas/balance></label>
-                <input class=form-control disabled id=run_balance>
-            </div>
-            <div class=col>
-                <label data-i18n=send-nas/amount></label>
-                <input class=form-control id=run_value value=0 data-validate-order-matters="required number">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class=col>
-                <label data-i18n=gas-limit></label>
-                <input class=form-control type=text id=run_gas_limit value=200000>
-            </div>
-            <div class=col>
-                <label data-i18n=gas-price></label>
-                <i>( 1 NAS = 1EWei = 10
-                    <sup>18</sup> Wei )</i>
-                <input class=form-control type=text id=run_gas_price>
-            </div>
-        </div>
-
-        <div class="active1 result" id=result></div>
-
-        <div class="form-group row">
-            <!--<div class=col>-->
-                <!--<button class="btn btn-block" data-i18n=contract/call_test disabled id=call_test></button>-->
+    <div class=select-wallet-file style="display: none;"></div>
+    <div class="card" id="cardList" style="display: none;">
+        <!--<div class="card-header">-->
+            <!--<a class="card-link collapsed" data-toggle="collapse"  href="#card-element-932591"><span class="badge badge-dark">张三</span>  <span class="badge badge-success">金额:1000元</span> <span class="badge badge-info align-content-end">收入</span></a></a></a>-->
+            <!--<button class="btn btn-sm btn-light float-lg-right">删除 </button>-->
+        <!--</div>-->
+        <!--<div id="card-element-932591" class="collapse ">-->
+            <!--<div class="card-body">-->
+                <!--<span class="badge badge-info">类别:结婚</span></a>-->
+                <!--<span class="badge badge-primary">时间:2008</span></a>-->
+                <!--<span class="badge badge-secondary">备注:非常好请使用帐号（钱包地址）（钱包地址）登录查看记请使用帐号（钱包地址）登录查看记请使用帐号（钱包地址）登录查看记</span>-->
             <!--</div>-->
-            <div class=col>
-                <button class="btn btn-block" data-i18n=contract/call_submit disabled id=call></button>
-            </div>
-        </div>
+        <!--</div>-->
     </div>
-    <a id="modal-565270" href="#modal-container-565270" role="button" class="btn" data-toggle="modal">记账</a>
-    <div class="card">
-        <div class="card-header">
-            <a class="card-link collapsed" data-toggle="collapse"  href="#card-element-932591"><span class="badge badge-dark">张三</span>  <span class="badge badge-success">金额:1000元</span> <span class="badge badge-info align-content-end">收入</span></a></a></a>
-            <button class="btn btn-sm btn-light float-lg-right">删除 </button>
-        </div>
-        <div id="card-element-932591" class="collapse ">
-            <div class="card-body">
-                <span class="badge badge-info">类别:结婚</span></a>
-                <span class="badge badge-primary">时间:2008</span></a>
-                <span class="badge badge-secondary">备注:非常好请使用帐号（钱包地址）（钱包地址）登录查看记请使用帐号（钱包地址）登录查看记请使用帐号（钱包地址）登录查看记</span>
-            </div>
-        </div>
+    <div class="content" style="display: none;">
+        <a id="modal-565270" href="#modal-container-565270" role="button" class="btn" data-toggle="modal">记账</a>
+
+        <!-- 选择钱包 -->
+        <!--<div class="container select-wallet-file"></div>-->
+
     </div>
-    <div class="modal fade jizhang" id="modal-container-565270" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabhhnel">
-                        记帐
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">×</span>
-                    </button>
+    <div class="fade loading modal" data-backdrop=static>
+        <div class=modal-dialog>
+            <div class=modal-content>
+                <div class=modal-body>
+                    <div class=progress>
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role=progressbar
+                             style="width: 100%"></div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="col-lg-12">
-                        <form>
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-form-label">姓名</label>
-                                <div class="col-lg-10">
+            </div>
+        </div>
+    </div>
+</div>
 
-                                    <input type="text" class="form-control" id="u_name" placeholder="请输入记帐人姓名">
-                                </div>
-                            </div>
-                            <div class="form-group row ">
-                                <label class="col-lg-2 col-form-label">金额</label>
-                                <div class="col-lg-10">
-                                    <input class="form-control " type="text" id="u_money" placeholder="请输入金额">
-                                </div>
-                            </div>
+<div class="modal fade jizhang" id="modal-container-565270" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabhhnel">
+                    记帐
+                </h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <form>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">姓名</label>
+                            <div class="col-lg-10">
 
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-form-label">类别</label>
-                                <div class="col-lg-10 input-group">
-                                    <input type="text" class="form-control " id="u_cause"
-                                           placeholder="请输入或选择类别">
-                                    <div class="input-group-button ">
-                                        <button class="btn dropdown-toggle" type="button"
-                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item  a_cause" href="#">结婚</a>
-                                            <a class="dropdown-item  a_cause" href="#" >生孩子</a>
-                                            <a class="dropdown-item  a_cause" href="#">开业</a>
-                                            <a class="dropdown-item  a_cause" href="#">乔迁</a>
-                                        </div>
+                                <input type="text" class="form-control" id="u_name" placeholder="请输入记帐人姓名">
+                            </div>
+                        </div>
+                        <div class="form-group row ">
+                            <label class="col-lg-2 col-form-label">金额</label>
+                            <div class="col-lg-10">
+                                <input class="form-control " type="text" id="u_money" placeholder="请输入金额">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">类别</label>
+                            <div class="col-lg-10 input-group">
+                                <input type="text" class="form-control " id="u_cause"
+                                       placeholder="请输入或选择类别">
+                                <div class="input-group-button ">
+                                    <button class="btn dropdown-toggle" type="button"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item  a_cause" href="#">结婚</a>
+                                        <a class="dropdown-item  a_cause" href="#" >生孩子</a>
+                                        <a class="dropdown-item  a_cause" href="#">开业</a>
+                                        <a class="dropdown-item  a_cause" href="#">乔迁</a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group row ">
-                                <label class="col-lg-2 col-form-label">日期</label>
-                                <div class="col-lg-10" >
-                                    <input class="form-control "  id="u_date" type="text" placeholder="请输入日期">
-                                </div>
+                        </div>
+                        <div class="form-group row ">
+                            <label class="col-lg-2 col-form-label">日期</label>
+                            <div class="col-lg-10" >
+                                <input class="form-control "  id="u_date" type="text" placeholder="请输入日期">
                             </div>
-                            <div class="form-group row ">
-                                <label class="col-lg-2 col-form-label">备注</label>
-                                <div class="col-lg-10" >
-                                    <input class="form-control " id="u_mark" type="text" placeholder="请输入备注">
-                                </div>
+                        </div>
+                        <div class="form-group row ">
+                            <label class="col-lg-2 col-form-label">备注</label>
+                            <div class="col-lg-10" >
+                                <input class="form-control " id="u_mark" type="text" placeholder="请输入备注">
                             </div>
-                            <div class="form-group text-center row">
-                                <div class="radio " style="margin-left: 20px">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="收入" checked>
-                                        收入
-                                    </label>
-                                </div>
-                                <div class="radio" style="margin-left: 10px">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="支出">
-                                        支出
-                                    </label>
-                                </div>
+                        </div>
+                        <div class="form-group text-center row">
+                            <div class="radio " style="margin-left: 20px">
+                                <label>
+                                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="收入" checked>
+                                    收入
+                                </label>
                             </div>
+                            <div class="radio" style="margin-left: 10px">
+                                <label>
+                                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="支出">
+                                    支出
+                                </label>
+                            </div>
+                        </div>
 
-                        </form>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-primary" id="save_u">
+                    保存
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    取消
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade wallet-content" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="">
+                    钱包
+                </h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="deploy_contract tab" id=tab3>
+
+                        <div class="form-group row">
+                            <div class=col>
+                                <label data-i18n=send-nas/from-address></label>
+                                <div class=icon-address data-id=run_from_addr data-disabled></div>
+                            </div>
+                            <div class=col>
+                                <label data-i18n=send-nas/to-address></label>
+                                <div class=icon-address data-id=run_to_addr></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class=col>
+                                <label data-i18n=send-nas/balance></label>
+                                <input class=form-control disabled id=run_balance>
+                            </div>
+                            <div class=col>
+                                <label data-i18n=send-nas/amount></label>
+                                <input class=form-control id=run_value value=0 data-validate-order-matters="required number">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class=col>
+                                <label data-i18n=gas-limit></label>
+                                <input class=form-control type=text id=run_gas_limit value=200000>
+                            </div>
+                            <div class=col>
+                                <label data-i18n=gas-price></label>
+                                <i>( 1 NAS = 1EWei = 10
+                                    <sup>18</sup> Wei )</i>
+                                <input class=form-control type=text id=run_gas_price>
+                            </div>
+                        </div>
+
+                        <div class="active1 result" id=result></div>
+
+                        <div class="form-group row">
+                            <!--<div class=col>-->
+                            <!--<button class="btn btn-block" data-i18n=contract/call_test disabled id=call_test></button>-->
+                            <!--</div>-->
+                            <div class=col>
+                                <button class="btn btn-block" data-i18n=contract/call_submit disabled id=call></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-
-                    <button type="button" class="btn btn-primary" id="save_u">
-                        保存
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        取消
-                    </button>
-                </div>
             </div>
-
         </div>
 
     </div>
 
-    <!-- 选择钱包 -->
-    <!--<div class="container select-wallet-file"></div>-->
-
 </div>
-<div class="fade loading modal" data-backdrop=static>
-    <div class=modal-dialog>
-        <div class=modal-content>
-            <div class=modal-body>
-                <div class=progress>
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role=progressbar
-                         style="width: 100%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!--<script src="./js/jquery-3.3.1.min.js"></script>-->
 <!--<script src="./js/bootstrap.min.js"></script>-->
 
@@ -293,7 +324,9 @@
         fzq.mark = umark;
         fzq.type=utype;
         var json  = JSON.stringify(fzq);
-        console.log("json="+json)
+        console.log("json="+json);
+        $(".wallet-content").modal("show");
+
         $(".jizhang").modal("hide");//关闭模态框
     });
     $('.dropdown-item').click(function(){//设置事件
@@ -315,82 +348,146 @@
         iconAddress: ".icon-address",//来自地址、目的地址
         logoMain: ".logo-main",
         numberComma: ".number-comma",
-        selectWalletFile: [".select-wallet-file", onUnlockFile]
+        selectWalletFile: [".select-wallet-file", onUnlockFile]//点击解锁调用的方法
     });
 
     $("#call").on("click", onClickCall);//submit写数据时调用
     $("#call_test").on("click", onClickCallTest);//callTest获取数据调用
 
     /**
-     * unlock执行的方法
+     * 点击解锁执行的方法
      * @param swf
      * @param fileJson
      * @param account
      * @param password
      */
     function onUnlockFile(swf, fileJson, account, password) {
-        var balance_nas, state,
-            fromAddr = account.getAddressString(),
-            $tab = $(swf).closest(".tab");
+        var requestFlag = $('#requestFlag').val();
+        //1:开始记账,2:查看记账记录
+        if (requestFlag == 1) {
+            var balance_nas, state,
+                    fromAddr = account.getAddressString(),
+                    $tab = $(swf).closest(".tab");
 
-        $(".modal.loading").modal("show");
+            $(".modal.loading").modal("show");
 
-        $("#run_from_addr").val(fromAddr).trigger("input");
-//        if ($tab.prop("id") == "tab2") {
-//            $("#from_addr").val(fromAddr).trigger("input");
-//            $("#to_addr").val(account.getAddressString()).trigger("input");
-//        } else if ($tab.prop("id") == "tab3")
-//            $("#run_from_addr").val(fromAddr).trigger("input");
+            $("#run_from_addr").val(fromAddr).trigger("input");
 
-        try {
-            account.fromKey(fileJson, password);
-            globalParams.account = account;
-            $("#unlock").hide();
-            $("#send").show();
+            try {
+                account.fromKey(fileJson, password);
+                globalParams.account = account;
+                $("#unlock").hide();
+                $("#send").show();
 
-            neb.api.gasPrice()
-                .then(function (resp) {
-                    $("#gas_price").val(resp.gas_price);
-                    $("#run_gas_price").val(resp.gas_price);
-
-                    return neb.api.getAccountState(fromAddr);
-                })
-                .then(function (resp) {
-                    //submit 要处理
+                neb.api.gasPrice()
+                        .then(function (resp) {
+                            $("#gas_price").val(resp.gas_price);
+                            $("#run_gas_price").val(resp.gas_price);//Gas 价格 read_gas_price
+                            $("#read_gas_price").val(resp.gas_price);
+                            return neb.api.getAccountState(fromAddr);
+                        })
+                        .then(function (resp) {
+                            $('#isUnlinkFlag').val(1);
+                            //submit 要处理
 //                    $("#call_test").attr("disabled", false);
-                    $("#call").attr("disabled", false);
+                            $("#call").attr("disabled", false);
 //                        $("#call_result").text("");
 //                        $(".next").removeClass("active1");
-                    var balance = nebulas.Unit.fromBasic(resp.balance, "nas");
+                            var balance = nebulas.Unit.fromBasic(resp.balance, "nas");
 
-                    $("#run_balance").val(balance + " NAS");
+                            $("#run_balance").val(balance + " NAS");
+                            $(".jizhang").modal("show");
+                            $(".modal.loading").modal("hide");
+                        })
+                        .catch(function (e) {
+                            // this catches e thrown by nebulas.js!neb
 
-                    $(".modal.loading").modal("hide");
-                })
-                .catch(function (e) {
-                    // this catches e thrown by nebulas.js!neb
+                            bootbox.dialog({
+                                backdrop: true,
+                                onEscape: true,
+                                message: i18n.apiErrorToText(e.message),
+                                size: "large",
+                                title: "Error"
+                            });
 
-                    bootbox.dialog({
-                        backdrop: true,
-                        onEscape: true,
-                        message: i18n.apiErrorToText(e.message),
-                        size: "large",
-                        title: "Error"
-                    });
-
-                    $(".modal.loading").modal("hide");
+                            $(".modal.loading").modal("hide");
+                        });
+            } catch (e) {
+                // this catches e thrown by nebulas.js!account
+                bootbox.dialog({
+                    backdrop: true,
+                    onEscape: true,
+                    message: localSave.getItem("lang") == "en" ? e : "keystore 文件错误, 或者密码错误",
+                    size: "large",
+                    title: "Error"
                 });
-        } catch (e) {
-            // this catches e thrown by nebulas.js!account
-            bootbox.dialog({
-                backdrop: true,
-                onEscape: true,
-                message: localSave.getItem("lang") == "en" ? e : "keystore 文件错误, 或者密码错误",
-                size: "large",
-                title: "Error"
-            });
 
-            $(".modal.loading").modal("hide");
+                $(".modal.loading").modal("hide");
+            }
+        }
+        if (requestFlag == 2) {
+            var balance_nas, state,
+                    fromAddr = account.getAddressString(),
+                    $tab = $(swf).closest(".tab");
+
+            $(".modal.loading").modal("show");
+
+            $("#run_from_addr").val(fromAddr).trigger("input");
+
+            try {
+                account.fromKey(fileJson, password);
+                globalParams.account = account;
+                $("#unlock").hide();
+                $("#send").show();
+
+                neb.api.gasPrice()
+                        .then(function (resp) {
+                            $("#gas_price").val(resp.gas_price);
+                            $("#run_gas_price").val(resp.gas_price);//Gas 价格
+                            $("#read_gas_price").val(resp.gas_price);
+
+                            return neb.api.getAccountState(fromAddr);
+                        })
+                        .then(function (resp) {
+                            $('#isUnlinkFlag').val(1);
+                            //submit 要处理
+//                    $("#call_test").attr("disabled", false);
+                            $("#call").attr("disabled", false);
+//                        $("#call_result").text("");
+//                        $(".next").removeClass("active1");
+                            var balance = nebulas.Unit.fromBasic(resp.balance, "nas");
+
+                            $("#run_balance").val(balance + " NAS");
+                            $("#read_run_balance").val(balance + " NAS");
+                            $(".modal.loading").modal("hide");
+                            //请求列表数据
+                            onClickCallTest();
+                        })
+                        .catch(function (e) {
+                            // this catches e thrown by nebulas.js!neb
+
+                            bootbox.dialog({
+                                backdrop: true,
+                                onEscape: true,
+                                message: i18n.apiErrorToText(e.message),
+                                size: "large",
+                                title: "Error"
+                            });
+
+                            $(".modal.loading").modal("hide");
+                        });
+            } catch (e) {
+                // this catches e thrown by nebulas.js!account
+                bootbox.dialog({
+                    backdrop: true,
+                    onEscape: true,
+                    message: localSave.getItem("lang") == "en" ? e : "keystore 文件错误, 或者密码错误",
+                    size: "large",
+                    title: "Error"
+                });
+
+                $(".modal.loading").modal("hide");
+            }
         }
     }
 
@@ -398,7 +495,7 @@
      * callTest调用
      */
     function onClickCallTest() {
-        validateTab3() && innerCall(function (params) {
+        innerCall(function (params) {
             neb.api
                     .call({
                         from: params.from,
@@ -410,15 +507,23 @@
                         contract: params.contract
                     })
                     .then(function (resp) {
-                        $("#aaa").text(resp);
                         // var xxx = JSON.parse(resp);
-                        var name= resp.name;
-                        alert("name = "+name);
                         if (resp.execute_err && resp.execute_err !== "") {
                             $("#call").attr("disabled", true);
                             $("#call_result").text("");
                             $(".next").removeClass("active1");
                         } else {
+                            $('.select-wallet-file').hide();
+                            $('#cardList').empty();
+                            var dataListStr = resp.result;
+                            var dataList = JSON.parse(dataListStr);
+                            var len = dataList.length;
+                            var str = '';
+                            for (var i=0; i<len; i++) {
+                                str += '<div class="card-header"><a class="card-link collapsed" data-toggle="collapse"  href="#card-element-932591"><span class="badge badge-dark">'+dataList[i]['name']+'</span>  <span class="badge badge-success">金额:'+dataList[i]['money']+'</span> <span class="badge badge-info align-content-end">'+dataList[i]['cause']+'</span><span class="badge badge-info align-content-end">'+dataList[i]['date']+'</span><span class="badge badge-info align-content-end">'+dataList[i]['mark']+'</span><span class="badge badge-info align-content-end">'+dataList[i]['type']+'</span></a></a></a><button class="btn btn-sm btn-light float-lg-right">删除 </button></div>';
+                            }
+                            $('#cardList').append(str);
+                            $('#cardList').show();
                             $("#call").attr("disabled", false);
                             $("#call_result").text("");
                             $(".next").removeClass("active1");
@@ -448,6 +553,9 @@
             neb.api
                 .sendRawTransaction(gTx.toProtoString())
                 .then(function (resp) {
+                    $('.select-wallet-file').hide();
+                    $(".wallet-content").hide();
+                    $('.modal-backdrop').hide();
                     console.log(JSON.stringify(resp));
                     $("#call_result").text(JSON.stringify(resp));
                     $(".result").removeClass("active1");
@@ -474,14 +582,15 @@
         params.from = globalParams.account.getAddressString();
 
         // prepare to
-        let toAddr = $("#run_to_addr").val().trim();
-        if (!Account.isValidAddress(toAddr)) {
-            $("#run_to_addr").addClass("err");
-            setTimeout(function () {
-                $("#run_to_addr").removeClass("err");
-            }, 5000);
-            return;
-        }
+//        let toAddr = $("#run_to_addr").val().trim();
+        let toAddr = 'n1zSjmwufiVnYhy8DmMQmhfRvopj5pZrNps';
+//        if (!Account.isValidAddress(toAddr)) {
+//            $("#run_to_addr").addClass("err");
+//            setTimeout(function () {
+//                $("#run_to_addr").removeClass("err");
+//            }, 5000);
+//            return;
+//        }
         params.to = toAddr;
 
         // prepare gasLimit
@@ -491,19 +600,19 @@
         } catch (err) {
             console.log(err);
         }
-        if (gasLimit.cmp(Utils.toBigNumber(0)) <= 0) {
-            $("#run_gas_limit").addClass("err");
-            setTimeout(function () {
-                $("#run_gas_limit").removeClass("err");
-            }, 5000);
-            return;
-        }
+//        if (gasLimit.cmp(Utils.toBigNumber(0)) <= 0) {
+//            $("#run_gas_limit").addClass("err");
+//            setTimeout(function () {
+//                $("#run_gas_limit").removeClass("err");
+//            }, 5000);
+//            return;
+//        }
         params.gasLimit = gasLimit.toNumber();
 
         // prepare gasPrice
         let gasPrice = Utils.toBigNumber(0);
         try {
-            gasPrice = Utils.toBigNumber($("#run_gas_price").val());
+            gasPrice = Utils.toBigNumber($("#read_gas_price").val());
         } catch (err) {
             console.log(err);
         }
@@ -515,7 +624,6 @@
             return;
         }
         params.gasPrice = gasPrice.toNumber();
-
         // prepare value
         let value = Utils.toBigNumber(0);
         try {
@@ -529,7 +637,6 @@
             return;
         }
         params.value = value;
-
         // prepare contract
         params.contract = {
             "function": 'get',
@@ -630,6 +737,12 @@
         var arr = [];
 
         var fdata = fzq;
+        fzq.name = $('#u_name').val();
+        fzq.money = $('#u_money').val();
+        fzq.cause = $('#u_cause').val();
+        fzq.date = $('#u_date').val();
+        fzq.mark = $('#u_mark').val();
+        fzq.type = $("input[name='optionsRadios']:checked").val();
 
         arr.push(fzq.name);
         arr.push(fzq.money);
@@ -637,6 +750,7 @@
         arr.push(fzq.date);
         arr.push(fzq.mark);
         arr.push(fzq.type);
+
         params.contract = {
             "function": 'set',
             "args": JSON.stringify(arr)//取方法参数
@@ -664,6 +778,30 @@
             });
         });
     }
+
+
+    //开始记账
+    $('#startBill').click('bind',function(){
+        var isUnlock = $('#isUnlinkFlag').val();
+        if (isUnlock == 1) {
+            $(".jizhang").modal("show");
+        } else {
+            $('#requestFlag').val(1);
+            $('.select-wallet-file').show();
+        }
+
+    });
+
+    //查看记账记录
+    $('#checkRecord').click('bind', function(){
+        var isUnlock = $('#isUnlinkFlag').val();
+        if (isUnlock) {
+            onClickCallTest();
+        } else {
+            $('#requestFlag').val(2);
+            $('.select-wallet-file').show();
+        }
+    });
 </script>
 </body>
 </html>

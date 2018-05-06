@@ -553,6 +553,7 @@
             neb.api
                 .sendRawTransaction(gTx.toProtoString())
                 .then(function (resp) {
+                    onClickCallTest();
                     $('.select-wallet-file').hide();
                     $(".wallet-content").hide();
                     $('.modal-backdrop').hide();

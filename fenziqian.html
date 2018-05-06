@@ -45,7 +45,9 @@
 
     <div class="jumbotron text-center">
         <h1>区块链份子钱记账本</h1>
-        <p>说明:请使用帐号（钱包地址）登录查看记账</p>
+        <p id="aaa">说明:请使用帐号（钱包地址）登录查看记账</p>
+        <p id="bbb">说明:请使用帐号（钱包地址）登录查看记账</p>
+        <p id="ccc">说明:请使用帐号（钱包地址）登录查看记账</p>
         <p>
             <button class="btn btn-primary btn-lg start" role="button">开始使用</button>
         </p>
@@ -408,8 +410,10 @@
                         contract: params.contract
                     })
                     .then(function (resp) {
-                        $("#call_test_result").text(JSON.stringify(resp));
-
+                        $("#aaa").text(resp);
+                        // var xxx = JSON.parse(resp);
+                        var name= resp.name;
+                        alert("name = "+name);
                         if (resp.execute_err && resp.execute_err !== "") {
                             $("#call").attr("disabled", true);
                             $("#call_result").text("");
@@ -628,7 +632,11 @@
         var fdata = fzq;
 
         arr.push(fzq.name);
-        arr.push(fzq);
+        arr.push(fzq.money);
+        arr.push(fzq.cause);
+        arr.push(fzq.date);
+        arr.push(fzq.mark);
+        arr.push(fzq.type);
         params.contract = {
             "function": 'set',
             "args": JSON.stringify(arr)//取方法参数

@@ -116,7 +116,7 @@ var uiBlock = function () {
                         // do not validate when disabled
                         (attrDisabled ? " disabled" : 'value="n1zSjmwufiVnYhy8DmMQmhfRvopj5pZrNps" disabled data-i18n=placeholder/addr data-validate-order-matters="required lengthEq35"') +
                         (attrId ? " id=" + attrId : "") +
-                        "><canvas class=placeholder></canvas>")
+                        ">")
                     .on("input", "input", onInput);
             }
 

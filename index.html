@@ -112,7 +112,7 @@
                         <div class="form-group row ">
                             <label class="col-lg-2 col-form-label">金额</label>
                             <div class="col-lg-10">
-                                <input class="form-control " type="text" id="u_money" placeholder="请输入金额">
+                                <input class="form-control " type="number" id="u_money" placeholder="请输入金额">
                             </div>
                         </div>
 
@@ -178,7 +178,6 @@
     </div>
 
 </div>
-
 <div class="modal fade wallet-content " role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document" style="width: 600px">
         <div class="modal-content">
@@ -341,8 +340,8 @@
         },
         validateTab3 = uiBlock.validate("#tab3");
 
-    neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
-    // neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
+    // neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+    neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
     // neb.setRequest(new nebulas.HttpRequest(localSave.getItem("apiPrefix") || "https://testnet.nebulas.io/"));
     uiBlock.insert({
         footer: ".footer",

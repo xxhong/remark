@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>份子钱记账本</title>
     <link rel=stylesheet href=lib/bootstrap-4.0.0-dist/css/bootstrap.min.css>
+    <link rel=stylesheet href=lib/bootstrap-table/bootstrap-table.css>
     <link rel=stylesheet href=lib/prismjs-1.13.0/prism.css>
     <link rel=stylesheet href=css/base.css>
     <link rel=stylesheet href=css/ui-block.css>
@@ -50,17 +51,21 @@
     </div>
     <div class=select-wallet-file style="display: none;"></div>
     <div class="card" id="cardList" style="display: none;">
-        <!--<div class="card-header">-->
-        <!--<a class="card-link collapsed" data-toggle="collapse"  href="#card-element-932591"><span class="badge badge-dark">张三</span>  <span class="badge badge-success">金额:1000元</span> <span class="badge badge-info align-content-end">收入</span></a></a></a>-->
-        <!--<button class="btn btn-sm btn-light float-lg-right">删除 </button>-->
-        <!--</div>-->
-        <!--<div id="card-element-932591" class="collapse ">-->
-        <!--<div class="card-body">-->
-        <!--<span class="badge badge-info">类别:结婚</span></a>-->
-        <!--<span class="badge badge-primary">时间:2008</span></a>-->
-        <!--<span class="badge badge-secondary">备注:非常好请使用帐号（钱包地址）（钱包地址）登录查看记请使用帐号（钱包地址）登录查看记请使用帐号（钱包地址）登录查看记</span>-->
-        <!--</div>-->
-        <!--</div>-->
+        <table data-toggle="table">
+            <thead>
+                <tr>
+                    <th data-field="">姓名</th>
+                    <th data-field="">金额</th>
+                    <th data-field="">类别</th>
+                    <th data-field="">日期</th>
+                    <th data-field="">备注</th>
+                    <th data-field="">收入/支出</th>
+                </tr>
+            </thead>
+            <tbody id="listContent">
+
+            </tbody>
+        </table>
     </div>
     <div class="content" style="display: none;">
         <a id="modal-565270" href="#modal-container-565270" role="button" class="btn" data-toggle="modal">记账</a>
@@ -253,6 +258,7 @@
 <!--<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 <script src=lib/jquery-3.3.1.min.js></script>
 <script src=lib/bootstrap-4.0.0-dist/js/bootstrap.bundle.min.js data-depends=jquery.slim></script>
+<script src=lib/bootstrap-table/bootstrap-table.js></script>
 <script src=lib/bootbox.min.js data-depends="bootstrap jquery.slim"></script>
 <script src=lib/blockies.min.js></script>
 <script src=lib/js-beautify-1.7.5/beautify.js></script>
@@ -510,15 +516,17 @@
                         $(".next").removeClass("active1");
                     } else {
                         $('.select-wallet-file').hide();
-                        $('#cardList').empty();
+                        $('#listContent').empty();
                         var dataListStr = resp.result;
                         var dataList = JSON.parse(dataListStr);
                         var len = dataList.length;
                         var str = '';
                         for (var i=0; i<len; i++) {
-                            str += '<div class="card-header"><a class="card-link collapsed" data-toggle="collapse"  href="#card-element-932591"><span class="badge badge-dark">'+dataList[i]['name']+'</span>  <span class="badge badge-success">金额:'+dataList[i]['money']+'</span> <span class="badge badge-info align-content-end">'+dataList[i]['cause']+'</span><span class="badge badge-info align-content-end">'+dataList[i]['date']+'</span><span class="badge badge-info align-content-end">'+dataList[i]['mark']+'</span><span class="badge badge-info align-content-end">'+dataList[i]['type']+'</span></a></a></a><button class="btn btn-sm btn-light float-lg-right">删除 </button></div>';
+                            str += '<tr>' +
+                                    '<td>'+dataList[i]['name']+'</td><td>'+dataList[i]['money']+'</td><td>'+dataList[i]['cause']+'</td><td>'+dataList[i]['date']+'</td><td>'+dataList[i]['mark']+'</td><td>'+dataList[i]['type']+'</td>' +
+                                    '</tr>';
                         }
-                        $('#cardList').append(str);
+                        $('#listContent').append(str);
                         $('#cardList').show();
                         $("#call").attr("disabled", false);
                         $("#call_result").text("");

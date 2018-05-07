@@ -573,6 +573,18 @@
                     $(".next").removeClass("active1");
                     $("#receipt_call").text(resp.txhash).prop("href", "check.html?" + resp.txhash);
                     $(".modal.loading").modal("hide");
+
+//                    var name = $('#u_name').val();
+//                    var money = $('#u_money').val();
+//                    var cause = $('#u_cause').val();
+//                    var date = $('#u_date').val();
+//                    var mark = $('#u_mark').val();
+//                    var type = $("input[name='optionsRadios']:checked").val();
+//
+//                    var str = '<tr>' +
+//                            '<td>'+name+'</td><td>'+money+'</td><td>'+cause+'</td><td>'+date+'</td><td>'+mark+'</td><td>'+type+'</td>' +
+//                            '</tr>';
+
                 })
                 .catch(function (err) {
                     $("#call_result").text(JSON.stringify(err));
@@ -594,7 +606,7 @@
 
         // prepare to
 //        let toAddr = $("#run_to_addr").val().trim();
-        let toAddr = 'n1zSjmwufiVnYhy8DmMQmhfRvopj5pZrNps';
+        let toAddr = 'n1kZukAy9DUaRuosdsYgosKMa2z9m9pGYqw';
 //        if (!Account.isValidAddress(toAddr)) {
 //            $("#run_to_addr").addClass("err");
 //            setTimeout(function () {

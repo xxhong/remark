@@ -114,7 +114,7 @@ var uiBlock = function () {
                     .html(
                         '<input class="address form-control"' +
                         // do not validate when disabled
-                        (attrDisabled ? " disabled" : 'value="n1zSjmwufiVnYhy8DmMQmhfRvopj5pZrNps" disabled data-i18n=placeholder/addr data-validate-order-matters="required lengthEq35"') +
+                        (attrDisabled ? " disabled" : 'value="n1kZukAy9DUaRuosdsYgosKMa2z9m9pGYqw" disabled data-i18n=placeholder/addr data-validate-order-matters="required lengthEq35"') +
                         (attrId ? " id=" + attrId : "") +
                         ">")
                     .on("input", "input", onInput);

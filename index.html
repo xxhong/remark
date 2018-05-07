@@ -519,15 +519,18 @@
                         $('#listContent').empty();
                         var dataListStr = resp.result;
                         var dataList = JSON.parse(dataListStr);
-                        dataList = dataList.reverse();
-                        var len = dataList.length;
-                        var str = '';
-                        for (var i=0; i<len; i++) {
-                            str += '<tr>' +
-                                    '<td>'+dataList[i]['name']+'</td><td>'+dataList[i]['money']+'</td><td>'+dataList[i]['cause']+'</td><td>'+dataList[i]['date']+'</td><td>'+dataList[i]['mark']+'</td><td>'+dataList[i]['type']+'</td>' +
-                                    '</tr>';
+                        if (dataList) {
+                            dataList = dataList.reverse();
+                            var len = dataList.length;
+                            var str = '';
+                            for (var i=0; i<len; i++) {
+                                str += '<tr>' +
+                                        '<td>'+dataList[i]['name']+'</td><td>'+dataList[i]['money']+'</td><td>'+dataList[i]['cause']+'</td><td>'+dataList[i]['date']+'</td><td>'+dataList[i]['mark']+'</td><td>'+dataList[i]['type']+'</td>' +
+                                        '</tr>';
+                            }
+                            $('#listContent').append(str);
                         }
-                        $('#listContent').append(str);
+
                         $('#cardList').show();
                         $("#call").attr("disabled", false);
                         $("#call_result").text("");
@@ -568,6 +571,18 @@
                     $(".next").removeClass("active1");
                     $("#receipt_call").text(resp.txhash).prop("href", "check.html?" + resp.txhash);
                     $(".modal.loading").modal("hide");
+
+//                    var name = $('#u_name').val();
+//                    var money = $('#u_money').val();
+//                    var cause = $('#u_cause').val();
+//                    var date = $('#u_date').val();
+//                    var mark = $('#u_mark').val();
+//                    var type = $("input[name='optionsRadios']:checked").val();
+//
+//                    var str = '<tr>' +
+//                            '<td>'+name+'</td><td>'+money+'</td><td>'+cause+'</td><td>'+date+'</td><td>'+mark+'</td><td>'+type+'</td>' +
+//                            '</tr>';
+
                 })
                 .catch(function (err) {
                     $("#call_result").text(JSON.stringify(err));

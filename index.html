@@ -404,6 +404,7 @@
                         $("#run_balance").val(balance + " NAS");
                         $(".jizhang").modal("show");
                         $(".modal.loading").modal("hide");
+                        onClickCallTest();//请求列表数据
                     })
                     .catch(function (e) {
                         // this catches e thrown by nebulas.js!neb

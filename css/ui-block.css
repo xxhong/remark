@@ -140,7 +140,7 @@ body {
     */
 
 .select-wallet-file label.file {
-    background-color: #f5f5f5;
+    background-color:#157efb;
     border-radius: 3px;
     cursor: pointer;
     display: block;
@@ -150,6 +150,7 @@ body {
     line-height: 50px;
     overflow: hidden;
     text-align: center;
+    color: white;
     text-overflow: ellipsis;
 }
 
@@ -163,6 +164,10 @@ body {
 
 .select-wallet-file label.pass {
     display: block;
+}
+.select-wallet-file .btn-block{
+    background: darkgreen;
+    color: white;
 }
 
 .select-wallet-file input[type=password] {

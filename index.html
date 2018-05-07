@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>份子钱记账本</title>
     <link rel=stylesheet href=lib/bootstrap-4.0.0-dist/css/bootstrap.min.css>
     <link rel=stylesheet href=lib/bootstrap-table/bootstrap-table.css>
     <link rel=stylesheet href=lib/prismjs-1.13.0/prism.css>
@@ -26,18 +26,8 @@
                         data-target="#bs-example-navbar-collapse-1">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand" href="#">Brand</a>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">Link <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                    </ul>
+                <a class="navbar-brand" href="#">份子钱记账本</a>
 
-                </div>
             </nav>
         </div>
     </div>
@@ -45,13 +35,12 @@
 <div class="container-fluid">
 
     <div class="jumbotron text-center">
-        <h1>区块链份子钱记账本</h1>
-        <p id="aaa">说明:请使用帐号（钱包地址）登录查看记账</p>
-        <p id="bbb">说明:请使用帐号（钱包地址）登录查看记账</p>
-        <p id="ccc">说明:请使用帐号（钱包地址）登录查看记账</p>
-        <p>
-            <button class="btn btn-primary btn-lg" id="startBill">开始记账</button>
-            <button class="btn btn-primary btn-lg" id="checkRecord">查看记录</button>
+        <h1>份子钱记账本</h1>
+        <p id="aaa" style="margin-top: 10px">一款基于<span style="color: #0044cc  "><a href="https://incentive.nebulas.io/cn/signup.html?invite=7kBl2">星云链</a></span>的份子钱记账本</p>
+        <p  style="margin-top: 20px">
+            <button class="btn btn-primary " id="startBill">开始记账</button>
+            <button class="btn btn-primary " id="checkRecord">查看账本</button>
+
             <input type="hidden" id="requestFlag">
             <input type="hidden" id="read_gas_price"><!--读取数据-->
             <input type="hidden" id="read_run_balance"><!--读取数据-->
@@ -60,7 +49,6 @@
             <!--<button class="btn btn-primary btn-lg start" role="button">开始使用</button>-->
         </p>
     </div>
-
     <div class=select-wallet-file style="display: none;"></div>
     <div class="card" id="cardList" style="display: none;">
         <table data-toggle="table">
@@ -86,7 +74,7 @@
         <!--<div class="container select-wallet-file"></div>-->
 
     </div>
-    <div class="fade loading modal" data-backdrop=static>
+    <div class="fade loading modal" style="z-index: 9999" data-backdrop=static>
         <div class=modal-dialog>
             <div class=modal-content>
                 <div class=modal-body>
@@ -124,7 +112,7 @@
                         <div class="form-group row ">
                             <label class="col-lg-2 col-form-label">金额</label>
                             <div class="col-lg-10">
-                                <input class="form-control " type="text" id="u_money" placeholder="请输入金额">
+                                <input class="form-control " type="number" id="u_money" placeholder="请输入金额">
                             </div>
                         </div>
 
@@ -148,8 +136,8 @@
                         </div>
                         <div class="form-group row ">
                             <label class="col-lg-2 col-form-label">日期</label>
-                            <div class="col-lg-10" >
-                                <input class="form-control "  id="u_date" type="text" placeholder="请输入日期">
+                            <div class="col-lg-10"  >
+                                <input class="form-control datepicker"  id="u_date" type="text" placeholder="请输入日期">
                             </div>
                         </div>
                         <div class="form-group row ">
@@ -190,9 +178,8 @@
     </div>
 
 </div>
-
-<div class="modal fade wallet-content" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
+<div class="modal fade wallet-content " role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width: 600px">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="">
@@ -247,8 +234,8 @@
                             <!--<div class=col>-->
                             <!--<button class="btn btn-block" data-i18n=contract/call_test disabled id=call_test></button>-->
                             <!--</div>-->
-                            <div class=col>
-                                <button class="btn btn-block" data-i18n=contract/call_submit disabled id=call></button>
+                            <div class="col-lg-12">
+                                <button class="btn btn-primary btn-block"  disabled id=call>提交</button>
                             </div>
                         </div>
                     </div>
@@ -282,6 +269,7 @@
 <script src=js/ui-block.js data-depends="bootbox blockies jquery.slim i18n.js nebulas.js"></script>
 <script src=lib/codemirror/codemirror.js></script>
 <script src=lib/codemirror/javascript.js></script>
+<script src="js/laydate.js"></script>
 <script>
     var FzInfo = function(text) {
         this.name = "";
@@ -291,7 +279,12 @@
         this.mark = "";
         this.type = "";
     };
-    // var FzInfo={};
+
+    //执行一个laydate实例
+    laydate.render({
+        elem: '#u_date' //指定元素
+    });
+
     var fzq = new FzInfo();
     $(".start").on("click", onClickCallTest);//callTest获取数据调用
     $('#save_u').click(function () {
@@ -301,7 +294,7 @@
             bootbox.dialog({
                 backdrop: true,
                 onEscape: true,
-                message: localSave.getItem("lang") == "en" ? e : "姓名不能为空",
+                message:  "姓名不能为空",
                 size: "large",
                 title: "提示"
             });
@@ -311,7 +304,7 @@
             bootbox.dialog({
                 backdrop: true,
                 onEscape: true,
-                message: localSave.getItem("lang") == "en" ? e : "金额不能为空",
+                message: "金额不能为空",
                 size: "large",
                 title: "提示"
             });
@@ -347,7 +340,9 @@
         },
         validateTab3 = uiBlock.validate("#tab3");
 
-    neb.setRequest(new nebulas.HttpRequest(localSave.getItem("apiPrefix") || "https://testnet.nebulas.io/"));
+    // neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+    neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
+    // neb.setRequest(new nebulas.HttpRequest(localSave.getItem("apiPrefix") || "https://testnet.nebulas.io/"));
     uiBlock.insert({
         footer: ".footer",
         header: ".header"   ,

@@ -263,7 +263,7 @@ var uiBlock = function () {
                 .html(
                     "<p data-i18n=swf/name></p>" +
                     '<label class="file empty"><span data-i18n=swf/button></span><input type=file></label>' +
-                    '<label class="hide pass"><span data-i18n=swf/good></span><input type=password></label>' +
+                    '<label class="hide pass"><span data-i18n=swf/good></span><input class=form-control type=password></label>' +
                     '<button class="btn btn-block" data-i18n=swf/unlock></button>' 
                     )
                 .on("click", "button", onClickUnlock)

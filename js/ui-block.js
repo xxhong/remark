@@ -164,13 +164,13 @@ var uiBlock = function () {
             // lang
 
             langList = i18n.supports();
-            lang = (localSave.getItem("lang") || "").toLowerCase();
+            lang ="zh";// (localSave.getItem("lang") || "").toLowerCase();
             sLangButtons = "";
 
             for (i = 0, len = langList.length; i < len && langList[i] != lang; ++i);
 
             i == len && (i = 0);
-            localSave.setItem("lang", lang = langList[i]);
+            localSave.setItem("lang", "zh");
 
             for (i = 0, len = langList.length; i < len; ++i)
                 sLangButtons += '<button class="' + (langList[i] == lang ? "active " : "") + 'dropdown-item" data-lang=' + langList[i] + ">" + i18n.langName(langList[i]) + "</button>"

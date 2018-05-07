@@ -524,6 +524,7 @@
                         $('#listContent').empty();
                         var dataListStr = resp.result;
                         var dataList = JSON.parse(dataListStr);
+                        dataList = dataList.reverse();
                         var len = dataList.length;
                         var str = '';
                         for (var i=0; i<len; i++) {

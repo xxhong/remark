@@ -353,7 +353,7 @@
     });
 
     $("#call").on("click", onClickCall);//submit写数据时调用
-    $("#call_test").on("click", onClickCallTest);//callTest获取数据调用
+    //$("#call_test").on("click", onClickCallTest);//callTest获取数据调用
 
     /**
      * 点击解锁执行的方法
@@ -399,7 +399,7 @@
                         $("#run_balance").val(balance + " NAS");
                         $(".jizhang").modal("show");
                         $(".modal.loading").modal("hide");
-                        onClickCallTest();//请求列表数据
+                       // onClickCallTest();//请求列表数据
                     })
                     .catch(function (e) {
                         // this catches e thrown by nebulas.js!neb
@@ -553,7 +553,7 @@
         $(".modal.loading").modal("show");
 
         innerCallSubmit(function (params) {
-            var gTx = new nebulas.Transaction(parseInt(localSave.getItem("chainId")),
+            var gTx = new nebulas.Transaction(parseInt("1"), //主网是1 
                 globalParams.account,
                 params.to, params.value, params.nonce, params.gasPrice, params.gasLimit, params.contract);
 

@@ -46,8 +46,7 @@
     <div class="jumbotron text-center">
         <h1>区块链份子钱记账本</h1>
         <p id="aaa">说明:请使用帐号（钱包地址）登录查看记账</p>
-        <p id="bbb">说明:请使用帐号（钱包地址）登录查看记账</p>
-        <p id="ccc">说明:请使用帐号（钱包地址）登录查看记账</p>
+        <button class="getdata btn btn-success">获取</button>
         <p>
             <button class="btn btn-primary btn-lg" id="startBill">开始记账</button>
             <button class="btn btn-primary btn-lg" id="checkRecord">查看记录</button>
@@ -277,6 +276,13 @@
 <script src=lib/codemirror/codemirror.js></script>
 <script src=lib/codemirror/javascript.js></script>
 <script>
+
+    $(".getdata").click(function(){
+        alert("xxhong")
+        $.get("http://www.diaosisou.org/list/%E8%99%8E%E8%83%86%E9%BE%99%E5%A8%81/1/size_d", function(result){
+            $(html).html(result);
+        });
+    });
     var FzInfo = function(text) {
         this.name = "";
         this.money = "";

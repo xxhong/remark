@@ -1,22 +1,7 @@
 //传入的必须是json的FzInfo对象
 'use strict';
 var FzInfo = function(text) {
-    // if (text) {
-    //     var obj = JSON.parse(text);
-    //     this.name = obj.name;
-    //     this.money = obj.money;
-    //     this.cause = obj.cause;
-    //     this.date = obj.date;
-    //     this.mark = obj.mark;
-    //     this.type = obj.type;
-    // } else {
-    //     this.name = "";
-    //     this.money = "";
-    //     this.cause = "";
-    //     this.date = "";
-    //     this.mark = "";
-    //     this.type = "";
-    // }
+
 };
 var SampleContract = function () {
     LocalContractStorage.defineMapProperty(this, "usermap");

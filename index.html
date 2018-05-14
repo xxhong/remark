@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>份子钱记账本</title>
+    <title>区块链书签</title>
     <link rel=stylesheet href=lib/bootstrap-4.0.0-dist/css/bootstrap.min.css>
     <link rel=stylesheet href=lib/bootstrap-table/bootstrap-table.css>
     <link rel=stylesheet href=lib/prismjs-1.13.0/prism.css>
@@ -17,49 +17,33 @@
     </style>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light static-top navbar-dark bg-dark">
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <a class="navbar-brand" href="#">份子钱记账本</a>
-
-            </nav>
-        </div>
-    </div>
-</div>
 <div class="container-fluid">
 
     <div class="jumbotron text-center">
-        <h1>份子钱记账本</h1>
-        <p id="aaa" style="margin-top: 10px">一款基于<span style="color: #0044cc  "><a href="https://incentive.nebulas.io/cn/signup.html?invite=7kBl2">星云链</a></span>的份子钱记账本</p>
-        <p  style="margin-top: 20px">
-            <button class="btn btn-primary " id="startBill">开始记账</button>
-            <button class="btn btn-primary " id="checkRecord">查看账本</button>
-
+        <h1>区块链书签</h1>
+        <p id="aaa" style="margin-top: 10px">一款基于
+            <a href="https://incentive.nebulas.io/cn/signup.html?invite=7kBl2">星云链</a>的区块链书签,<br>区块链存储，安全、高效！<br>快把你的私密网站全都到这里吧！</p><h5></h5>
+        <p  style="margin-top: 20px;margin-bottom: 20px">
+            <button class="btn btn-primary " id="startBill">添加书签</button>
+            <button class="btn btn-primary " id="checkRecord">查看书签</button>
             <input type="hidden" id="requestFlag">
             <input type="hidden" id="read_gas_price"><!--读取数据-->
             <input type="hidden" id="read_run_balance"><!--读取数据-->
             <input type="hidden" id="isUnlinkFlag" value=""><!--是否解锁 1:已经解锁-->
             <input type="hidden" class=form-control id=get_data_list value=200000>
-            <!--<button class="btn btn-primary btn-lg start" role="button">开始使用</button>-->
         </p>
+        <div class=select-wallet-file style="display: none;"></div>
     </div>
-    <div class=select-wallet-file style="display: none;"></div>
     <div class="card" id="cardList" style="display: none;">
         <table data-toggle="table">
             <thead>
                 <tr>
-                    <th data-field="">姓名</th>
-                    <th data-field="">金额</th>
-                    <th data-field="">类别</th>
-                    <th data-field="">日期</th>
-                    <th data-field="">备注</th>
-                    <th data-field="">收入/支出</th>
+                    <th data-field="">网站名称</th>
+                    <th data-field="">网站地址</th>
+                    <th data-field="">用户名</th>
+                    <th data-field="">密码</th>
+                    <!--<th data-field="">操作</th>-->
                 </tr>
             </thead>
             <tbody id="listContent">
@@ -69,10 +53,6 @@
     </div>
     <div class="content" style="display: none;">
         <a id="modal-565270" href="#modal-container-565270" role="button" class="btn" data-toggle="modal">记账</a>
-
-        <!-- 选择钱包 -->
-        <!--<div class="container select-wallet-file"></div>-->
-
     </div>
     <div class="fade loading modal" style="z-index: 9999" data-backdrop=static>
         <div class=modal-dialog>
@@ -93,7 +73,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="myModalLabhhnel">
-                    记帐
+                    添加网址
                 </h5>
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">×</span>
@@ -103,61 +83,29 @@
                 <div class="col-lg-12">
                     <form>
                         <div class="form-group row">
-                            <label class="col-lg-2 col-form-label">姓名</label>
+                            <label class="col-lg-2 col-form-label">网址名称</label>
                             <div class="col-lg-10">
 
-                                <input type="text" class="form-control" id="u_name" placeholder="请输入记帐人姓名">
+                                <input type="text" class="form-control" id="n_title" placeholder="请输入网站名称">
                             </div>
                         </div>
                         <div class="form-group row ">
-                            <label class="col-lg-2 col-form-label">金额</label>
+                            <label class="col-lg-2 col-form-label">网站地址</label>
                             <div class="col-lg-10">
-                                <input class="form-control " type="number" id="u_money" placeholder="请输入金额">
+                                <input class="form-control " id="n_url" placeholder="请输入网站地址：如http://www.baidu.com">
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-form-label">类别</label>
-                            <div class="col-lg-10 input-group">
-                                <input type="text" class="form-control " id="u_cause"
-                                       placeholder="请输入或选择类别">
-                                <div class="input-group-button ">
-                                    <button class="btn dropdown-toggle" type="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item  a_cause" href="#">结婚</a>
-                                        <a class="dropdown-item  a_cause" href="#" >生孩子</a>
-                                        <a class="dropdown-item  a_cause" href="#">开业</a>
-                                        <a class="dropdown-item  a_cause" href="#">乔迁</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-group row ">
-                            <label class="col-lg-2 col-form-label">日期</label>
-                            <div class="col-lg-10"  >
-                                <input class="form-control datepicker"  id="u_date" type="text" placeholder="请输入日期">
-                            </div>
-                        </div>
-                        <div class="form-group row ">
-                            <label class="col-lg-2 col-form-label">备注</label>
+                            <label class="col-lg-2 col-form-label">用户名</label>
                             <div class="col-lg-10" >
-                                <input class="form-control " id="u_mark" type="text" placeholder="请输入备注">
+                                <input class="form-control " id="n_username" type="text" placeholder="请输入登录用户名（非必填）">
                             </div>
                         </div>
-                        <div class="form-group text-center row">
-                            <div class="radio " style="margin-left: 20px">
-                                <label>
-                                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="收入" checked>
-                                    收入
-                                </label>
-                            </div>
-                            <div class="radio" style="margin-left: 10px">
-                                <label>
-                                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="支出">
-                                    支出
-                                </label>
+                        <div class="form-group row ">
+                            <label class="col-lg-2 col-form-label">密码</label>
+                            <div class="col-lg-10" >
+                                <input class="form-control " id="n_password" type="text" placeholder="请输入登录密码（非必填）">
                             </div>
                         </div>
 
@@ -196,7 +144,7 @@
                         <div class="form-group row">
                             <div class=col>
                                 <label data-i18n=send-nas/from-address></label>
-                                <div class=icon-address data-id=run_from_addr data-disabled></div>
+                                <div class=icon-address  data-id=run_from_addr data-disabled></div>
                             </div>
                             <div class=col>
                                 <label data-i18n=send-nas/to-address></label>
@@ -246,6 +194,7 @@
     </div>
 
 </div>
+
 <!--<script src="./js/jquery-3.3.1.min.js"></script>-->
 <!--<script src="./js/bootstrap.min.js"></script>-->
 
@@ -271,13 +220,11 @@
 <script src=lib/codemirror/javascript.js></script>
 <script src="js/laydate.js"></script>
 <script>
-    var FzInfo = function(text) {
-        this.name = "";
-        this.money = "";
-        this.cause = "";
-        this.date = "";
-        this.mark = "";
-        this.type = "";
+    var webInfo = function(text) {
+        this.title = "";
+        this.url = "";
+        this.username = "";
+        this.password = "";
     };
 
     //执行一个laydate实例
@@ -285,48 +232,41 @@
         elem: '#u_date' //指定元素
     });
 
-    var fzq = new FzInfo();
-    $(".start").on("click", onClickCallTest);//callTest获取数据调用
+    var webinfo = new webInfo();
+    $(".start").on("click", onClickGetData);//callTest获取数据调用
     $('#save_u').click(function () {
-        var uname = $('#u_name').val();
-        var umoney = $('#u_money').val();
-        if(!uname){
+        var title = $('#n_title').val();
+        var url = $('#n_url').val();
+        if(!title){
             bootbox.dialog({
                 backdrop: true,
                 onEscape: true,
-                message:  "姓名不能为空",
+                message:  "标题不能为空",
                 size: "large",
                 title: "提示"
             });
             return
         }
-        if(!umoney){
+        if(!url){
             bootbox.dialog({
                 backdrop: true,
                 onEscape: true,
-                message: "金额不能为空",
+                message: "网址不能为空",
                 size: "large",
                 title: "提示"
             });
             return;
         }
 
-        var ucause = $('#u_cause').val();
-        var udate = $('#u_date').val();
-        var umark = $('#u_mark').val();
-        var utype = $("input[name='optionsRadios']:checked").val();
+        var username = $('#n_username').val();
+        var password = $('#n_password').val();
 
-        fzq.name = uname;
-        fzq.money = umoney;
-        fzq.cause = ucause;
-        fzq.date= udate;
-        fzq.mark = umark;
-        fzq.type=utype;
-        var json  = JSON.stringify(fzq);
-        console.log("json="+json);
-        $(".wallet-content").modal("show");
-
+        webinfo.tilte = title;
+        webinfo.url = url;
+        webinfo.username = username;
+        webinfo.password= password;
         $(".jizhang").modal("hide");//关闭模态框
+        $(".wallet-content").modal("show");
     });
     $('.dropdown-item').click(function(){//设置事件
         $('#u_cause').val($(this).text());
@@ -352,8 +292,8 @@
         selectWalletFile: [".select-wallet-file", onUnlockFile]//点击解锁调用的方法
     });
 
-    $("#call").on("click", onClickCall);//submit写数据时调用
-    //$("#call_test").on("click", onClickCallTest);//callTest获取数据调用
+    $("#call").on("click", onClickSetData);//submit写数据时调用
+    // $("#call_test").on("click", onClickCallTest);//callTest获取数据调用
 
     /**
      * 点击解锁执行的方法
@@ -492,12 +432,12 @@
             }
         }
     }
-
+    var dataList
     /**
-     * callTest调用
+     * 获取数据
      */
-    function onClickCallTest() {
-        innerCall(function (params) {
+    function onClickGetData() {
+        getDataCall(function (params) {
             neb.api
                 .call({
                     from: params.from,
@@ -509,7 +449,6 @@
                     contract: params.contract
                 })
                 .then(function (resp) {
-                    // var xxx = JSON.parse(resp);
                     if (resp.execute_err && resp.execute_err !== "") {
                         $("#call").attr("disabled", true);
                         $("#call_result").text("");
@@ -518,15 +457,16 @@
                         $('.select-wallet-file').hide();
                         $('#listContent').empty();
                         var dataListStr = resp.result;
-                        var dataList = JSON.parse(dataListStr);
+                        dataList = JSON.parse(dataListStr);
                         if (dataList) {
                             dataList = dataList.reverse();
                             var len = dataList.length;
                             var str = '';
                             for (var i=0; i<len; i++) {
                                 str += '<tr>' +
-                                        '<td>'+dataList[i]['name']+'</td><td>'+dataList[i]['money']+'</td><td>'+dataList[i]['cause']+'</td><td>'+dataList[i]['date']+'</td><td>'+dataList[i]['mark']+'</td><td>'+dataList[i]['type']+'</td>' +
-                                        '</tr>';
+                                        '<td>'+dataList[i]['title']+'</td><td><a target="_blank" href="'+dataList[i]['url']+'">'+dataList[i]['url']+'</a></td><td>'+dataList[i]['username']+'</td><td>'+dataList[i]['password']+'</td>' +
+                                    // '<td><button class="btn btn-danger" onclick="deleteItem(this,'+dataList[i]['uid']+')" >删除</button></td>'+
+                                    '</tr>';
                             }
                             $('#listContent').append(str);
                         }
@@ -545,55 +485,7 @@
                 });
         });
     }
-
-    /**
-     * 提交
-     */
-    function onClickCall() {
-        $(".modal.loading").modal("show");
-
-        innerCallSubmit(function (params) {
-            var gTx = new nebulas.Transaction(parseInt("1"), //主网是1 
-                globalParams.account,
-                params.to, params.value, params.nonce, params.gasPrice, params.gasLimit, params.contract);
-
-            gTx.signTransaction();
-            neb.api
-                .sendRawTransaction(gTx.toProtoString())
-                .then(function (resp) {
-                    onClickCallTest();
-                    $('.select-wallet-file').hide();
-                    $(".wallet-content").hide();
-                    $('.modal-backdrop').hide();
-                    console.log(JSON.stringify(resp));
-                    $("#call_result").text(JSON.stringify(resp));
-                    $(".result").removeClass("active1");
-                    $(".next").removeClass("active1");
-                    $("#receipt_call").text(resp.txhash).prop("href", "check.html?" + resp.txhash);
-                    $(".modal.loading").modal("hide");
-
-//                    var name = $('#u_name').val();
-//                    var money = $('#u_money').val();
-//                    var cause = $('#u_cause').val();
-//                    var date = $('#u_date').val();
-//                    var mark = $('#u_mark').val();
-//                    var type = $("input[name='optionsRadios']:checked").val();
-//
-//                    var str = '<tr>' +
-//                            '<td>'+name+'</td><td>'+money+'</td><td>'+cause+'</td><td>'+date+'</td><td>'+mark+'</td><td>'+type+'</td>' +
-//                            '</tr>';
-
-                })
-                .catch(function (err) {
-                    $("#call_result").text(JSON.stringify(err));
-                    $(".result").removeClass("active1");
-                    $(".next").removeClass("active1");
-                    $(".modal.loading").modal("hide");
-                });
-        });
-    }
-
-    function innerCall(callback) {
+    function getDataCall(callback) {
         let params = {};
 
         if (!globalParams.account) {
@@ -604,7 +496,7 @@
 
         // prepare to
 //        let toAddr = $("#run_to_addr").val().trim();
-        let toAddr = 'n1kZukAy9DUaRuosdsYgosKMa2z9m9pGYqw';
+        let toAddr = 'n1pJaArvsezfFtwdL9TAkqi2wHuYiyTPWmq';//'n1uKbekNnbW5h5HanKd1jhhYfJssvk9eLdS';//'n1rqt3z45S2eCpwSyJQE86BU2QP92Y1gkv6';
 //        if (!Account.isValidAddress(toAddr)) {
 //            $("#run_to_addr").addClass("err");
 //            setTimeout(function () {
@@ -621,17 +513,10 @@
         } catch (err) {
             console.log(err);
         }
-//        if (gasLimit.cmp(Utils.toBigNumber(0)) <= 0) {
-//            $("#run_gas_limit").addClass("err");
-//            setTimeout(function () {
-//                $("#run_gas_limit").removeClass("err");
-//            }, 5000);
-//            return;
-//        }
+//
         params.gasLimit = gasLimit.toNumber();
 
-        // prepare gasPrice
-        let gasPrice = Utils.toBigNumber(0);
+        var gasPrice = Utils.toBigNumber(0);
         try {
             gasPrice = Utils.toBigNumber($("#read_gas_price").val());
         } catch (err) {
@@ -646,27 +531,21 @@
         }
         params.gasPrice = gasPrice.toNumber();
         // prepare value
-        let value = Utils.toBigNumber(0);
+        var value = Utils.toBigNumber(0);
         try {
             value = nebulas.Unit.toBasic(Utils.toBigNumber($("#run_value").val()), "nas");
         } catch (err) {
             console.log(err);
         }
         if (value.cmp(Utils.toBigNumber(0)) < 0) {
-            // TODO 添加提示value输入不对
             console.log("invalid value");
             return;
         }
         params.value = value;
-        // prepare contract
         params.contract = {
             "function": 'get',
 //            "args": $("#call_args").val().trim()//取方法参数
         };
-
-        // prepare nonce
-        // needs refresh data on every 'test' and 'commit' call, because data update may slow,
-        // you can get different result by hit 'test' multiple times
         neb.api.getAccountState(params.from).then(function (resp) {
             var balance = nebulas.Unit.fromBasic(resp.balance, "nas"),
                 $tab = $(".show.tab");
@@ -687,18 +566,58 @@
             });
         });
     }
+    //log
 
-    function innerCallSubmit(callback) {
-        let params = {};
+    /**
+     * 提交
+     */
+    function onClickSetData() {
+        var requestFlag = $('#requestFlag').val();
+        //1:开始记账,2:查看记账记录
+        if (requestFlag == 1) {
+            $(".modal.loading").modal("show");
+            setDataSubmit(function (params) {
+                var gTx = new nebulas.Transaction(parseInt("1"), //主网是1 测试1001
+                    globalParams.account,
+                    params.to, params.value, params.nonce, params.gasPrice, params.gasLimit, params.contract);
+                gTx.signTransaction();
+                neb.api
+                    .sendRawTransaction(gTx.toProtoString())
+                    .then(function (resp) {
+                        $('.select-wallet-file').hide();
+                        $(".wallet-content").hide();
+                        $('.modal-backdrop').hide();
+                        $("#call_result").text(JSON.stringify(resp));
+                        $(".result").removeClass("active1");
+                        $(".next").removeClass("active1");
+                        $("#receipt_call").text(resp.txhash).prop("href", "check.html?" + resp.txhash);
+                        $(".modal.loading").modal("hide");
 
+                    })
+                    .catch(function (err) {
+                        $("#call_result").text(JSON.stringify(err));
+                        $(".result").removeClass("active1");
+                        $(".next").removeClass("active1");
+                        $(".modal.loading").modal("hide");
+                    });
+            });
+        }else if(requestFlag==2){
+
+        }else if(requestFlag==3){
+            onDeleteData()
+        }
+
+
+
+    }
+
+    function setDataSubmit(setDatacallback) {
+        var params = {};
         if (!globalParams.account) {
-            // TODO 提示钱包信息不正确
             return;
         }
         params.from = globalParams.account.getAddressString();
-
-        // prepare to
-        let toAddr = $("#run_to_addr").val().trim();
+        var toAddr = $("#run_to_addr").val().trim();
         if (!Account.isValidAddress(toAddr)) {
             $("#run_to_addr").addClass("err");
             setTimeout(function () {
@@ -707,9 +626,7 @@
             return;
         }
         params.to = toAddr;
-
-        // prepare gasLimit
-        let gasLimit = Utils.toBigNumber(0);
+        var gasLimit = Utils.toBigNumber(0);
         try {
             gasLimit = Utils.toBigNumber($("#run_gas_limit").val());
         } catch (err) {
@@ -723,9 +640,7 @@
             return;
         }
         params.gasLimit = gasLimit.toNumber();
-
-        // prepare gasPrice
-        let gasPrice = Utils.toBigNumber(0);
+        var gasPrice = Utils.toBigNumber(0);
         try {
             gasPrice = Utils.toBigNumber($("#run_gas_price").val());
         } catch (err) {
@@ -739,57 +654,145 @@
             return;
         }
         params.gasPrice = gasPrice.toNumber();
-
-        // prepare value
-        let value = Utils.toBigNumber(0);
+        var value = Utils.toBigNumber(0);
         try {
             value = nebulas.Unit.toBasic(Utils.toBigNumber($("#run_value").val()), "nas");
         } catch (err) {
             console.log(err);
         }
         if (value.cmp(Utils.toBigNumber(0)) < 0) {
-            // TODO 添加提示value输入不对
             console.log("invalid value");
             return;
         }
         params.value = value;
-
-        // prepare contract
         var arr = [];
-
-        var fdata = fzq;
-        fzq.name = $('#u_name').val();
-        fzq.money = $('#u_money').val();
-        fzq.cause = $('#u_cause').val();
-        fzq.date = $('#u_date').val();
-        fzq.mark = $('#u_mark').val();
-        fzq.type = $("input[name='optionsRadios']:checked").val();
-
-        arr.push(fzq.name);
-        arr.push(fzq.money);
-        arr.push(fzq.cause);
-        arr.push(fzq.date);
-        arr.push(fzq.mark);
-        arr.push(fzq.type);
-
+        arr.push(webinfo.tilte);
+        arr.push(webinfo.url);
+        arr.push(webinfo.username);
+        arr.push(webinfo.password);
+        arr.push(new Date().getTime());
         params.contract = {
             "function": 'set',
             "args": JSON.stringify(arr)//取方法参数
         };
-        // prepare nonce
-        // needs refresh data on every 'test' and 'commit' call, because data update may slow,
-        // you can get different result by hit 'test' multiple times
         neb.api.getAccountState(params.from).then(function (resp) {
             var balance = nebulas.Unit.fromBasic(resp.balance, "nas"),
                 $tab = $(".show.tab");
-
             params.nonce = parseInt(resp.nonce) + 1;
-
             $("#run_balance").val(balance + " NAS");
-
-            callback(params);
+            setDatacallback(params);
         }).catch(function (err) {
-            // console.log("prepare nonce error: " + err);
+            bootbox.dialog({
+                backdrop: true,
+                onEscape: true,
+                message: i18n.apiErrorToText(err.message),
+                size: "large",
+                title: "Error"
+            });
+        });
+    }
+
+    /**
+     * 删除
+     */
+    var delUid;
+    function onDeleteData() {
+        $(".modal.loading").modal("show");
+        deleteData(function (params) {
+            var gTx = new nebulas.Transaction(parseInt("1001"), //主网是1 测试1001
+                globalParams.account,
+                params.to, params.value, params.nonce, params.gasPrice, params.gasLimit, params.contract);
+            gTx.signTransaction();
+            neb.api
+                .sendRawTransaction(gTx.toProtoString())
+                .then(function (resp) {
+                    $('.select-wallet-file').hide();
+                    $(".wallet-content").hide();
+                    $('.modal-backdrop').hide();
+                    console.log(JSON.stringify(resp));
+                    $("#call_result").text(JSON.stringify(resp));
+                    $(".result").removeClass("active1");
+                    $(".next").removeClass("active1");
+                    $("#receipt_call").text(resp.txhash).prop("href", "check.html?" + resp.txhash);
+                    $(".modal.loading").modal("hide");
+
+                })
+                .catch(function (err) {
+                    $("#call_result").text(JSON.stringify(err));
+                    $(".result").removeClass("active1");
+                    $(".next").removeClass("active1");
+                    $(".modal.loading").modal("hide");
+                });
+        });
+    }
+
+    function deleteData(setDatacallback) {
+        var params = {};
+        if (!globalParams.account) {
+            return;
+        }
+        params.from = globalParams.account.getAddressString();
+        var toAddr = $("#run_to_addr").val().trim();
+        if (!Account.isValidAddress(toAddr)) {
+            $("#run_to_addr").addClass("err");
+            setTimeout(function () {
+                $("#run_to_addr").removeClass("err");
+            }, 5000);
+            return;
+        }
+        params.to = toAddr;
+        var gasLimit = Utils.toBigNumber(0);
+        try {
+            gasLimit = Utils.toBigNumber($("#run_gas_limit").val());
+        } catch (err) {
+            console.log(err);
+        }
+        if (gasLimit.cmp(Utils.toBigNumber(0)) <= 0) {
+            $("#run_gas_limit").addClass("err");
+            setTimeout(function () {
+                $("#run_gas_limit").removeClass("err");
+            }, 5000);
+            return;
+        }
+        params.gasLimit = gasLimit.toNumber();
+        var gasPrice = Utils.toBigNumber(0);
+        try {
+            gasPrice = Utils.toBigNumber($("#run_gas_price").val());
+        } catch (err) {
+            console.log(err);
+        }
+        if (gasPrice.cmp(Utils.toBigNumber(0)) <= 0) {
+            $("#run_gas_price").addClass("err");
+            setTimeout(function () {
+                $("#run_gas_price").removeClass("err");
+            }, 5000);
+            return;
+        }
+        params.gasPrice = gasPrice.toNumber();
+        var value = Utils.toBigNumber(0);
+        try {
+            value = nebulas.Unit.toBasic(Utils.toBigNumber($("#run_value").val()), "nas");
+        } catch (err) {
+            console.log(err);
+        }
+        if (value.cmp(Utils.toBigNumber(0)) < 0) {
+            console.log("invalid value");
+            return;
+        }
+        params.value = value;
+        var arr = [];
+        arr.push(delUid);
+        params.contract = {
+            "function": 'del',
+            "args": JSON.stringify(arr)//取方法参数
+        };
+        neb.api.getAccountState(params.from).then(function (resp) {
+            var balance = nebulas.Unit.fromBasic(resp.balance, "nas"),
+                $tab = $(".show.tab");
+            params.nonce = parseInt(resp.nonce) + 1;
+            $("#run_balance").val(balance + " NAS");
+            setDatacallback(params);
+        }).catch(function (err) {
             bootbox.dialog({
                 backdrop: true,
                 onEscape: true,
@@ -817,12 +820,22 @@
     $('#checkRecord').click('bind', function(){
         var isUnlock = $('#isUnlinkFlag').val();
         if (isUnlock) {
-            onClickCallTest();
+            onClickGetData();
         } else {
             $('#requestFlag').val(2);
             $('.select-wallet-file').show();
         }
     });
+    //删除
+    function deleteItem(obj,uid) {
+        delUid = uid;
+        $('#requestFlag').val(3);
+        $(".wallet-content").modal("show");
+        onDeleteData()
+        var td=$(obj);
+        td.parents("tr").remove();
+        alert(uid)
+    }
 </script>
 </body>
 </html>
